@@ -41,6 +41,7 @@
 #include "smartctl.h"
 #include "utility.h"
 #include "svnversion.h"
+#include "time.h"
 
 const char * smartctl_cpp_cvsid = "$Id$"
   CONFIG_H_CVSID SMARTCTL_H_CVSID;
@@ -304,7 +305,7 @@ static checksum_err_mode_t checksum_err_mode = CHECKSUM_ERR_WARN;
 static void scan_devices(const smart_devtype_list & types, bool with_open, char ** argv);
 
 
-/*      Takes command options and sets features to be run */    
+/*      Takes command options and sets features to be run */
 static int parse_options(int argc, char** argv, const char * & type,
   ata_print_options & ataopts, scsi_print_options & scsiopts,
   nvme_print_options & nvmeopts, bool & print_type_only)
@@ -745,7 +746,7 @@ static int parse_options(int argc, char** argv, const char * & type,
       }
       if (!parse_attribute_def(optarg, ataopts.attribute_defs, PRIOR_USER))
         badarg = true;
-      break;    
+      break;
     case 'P':
       if (!strcmp(optarg, "use")) {
         ataopts.ignore_presets = false;
@@ -1151,7 +1152,7 @@ static int parse_options(int argc, char** argv, const char * & type,
       Usage();
       return 0;
     } // closes switch statement to process command-line options
-    
+
     // Check to see if option had an unrecognized or incorrect argument.
     if (badarg) {
       printslogan();
@@ -1242,14 +1243,14 @@ static int parse_options(int argc, char** argv, const char * & type,
 
   // From here on, normal operations...
   printslogan();
-  
+
   // Warn if the user has provided no device name
   if (argc-optind<1){
     jerr("ERROR: smartctl requires a device name as the final command-line argument.\n\n");
     UsageSummary();
     return FAILCMD;
   }
-  
+
   // Warn if the user has provided more than one device name
   if (argc-optind>1){
     int i;
@@ -1528,6 +1529,7 @@ static int main_worker(int argc, char **argv)
     return 1;
 
   // Parse input arguments
+
   const char * type = 0;
   ata_print_options ataopts;
   scsi_print_options scsiopts;
@@ -1593,7 +1595,7 @@ static int main_worker(int argc, char **argv)
     jerr("Smartctl open device: %s failed: %s\n", dev->get_info_name(), dev->get_errmsg());
     return FAILDEV;
   }
-
+  // TODO: add timer here
   // Add JSON info similar to --scan output
   js_device_info(jglb["device"], dev.get());
 
@@ -1622,6 +1624,9 @@ int main(int argc, char **argv)
 {
   int status;
   bool badcode = false;
+  // set clock to find the device open and response time
+  clock_t t;
+  t = clock();
 
   try {
     try {
@@ -1632,6 +1637,9 @@ int main(int argc, char **argv)
       // Exit status from checksumwarning() and failuretest() arrives here
       status = ex;
     }
+    t = clock() - t;
+    // end timer here, add to the jglb code for the device response time
+    jglb["smartctl"]["device_response_time_sec"] = ((float)t) / CLOCKS_PER_SEC);
     // Print JSON if enabled
     if (jglb.has_uint128_output())
       jglb["smartctl"]["uint128_precision_bits"] = uint128_to_str_precision_bits();
@@ -1663,4 +1671,3 @@ int main(int argc, char **argv)
 
   return status;
 }
-
