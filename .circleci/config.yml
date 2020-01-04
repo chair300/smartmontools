@@ -145,7 +145,7 @@ references:
 
   sm_compile_freebsd12: &sm_compile_freebsd12
     run:
-      name: Creating static FreeBSD-12.0/amd64 binaries
+      name: Creating static FreeBSD-12.1/amd64 binaries
       command: |
         SM_VER=`cat ~/SM_VER` && SVNREV=`cat ~/SVNREV` &&
         BUILD_INFO='"(CircleCI)"' &&
