@@ -9,7 +9,6 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-
 #include "config.h"
 #define __STDC_FORMAT_MACROS 1 // enable PRI* for C++
 
