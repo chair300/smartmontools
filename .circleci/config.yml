@@ -7,15 +7,15 @@ references:
       name: Get SVN revision from the git SHA1 using github API
       command: |
         curl --silent https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/commits/${CIRCLE_SHA1} \
-        | jq .commit.message | sed -E 's|.*git-svn-id: http://svn.code.sf.net/p/smartmontools/code/trunk@([0-9]+).*|\1|' >~/SVNREV &&
+        | jq '.[0].sha' |sed s/\"//g >~/SVNREV &&
         test "`cat ~/SVNREV`" -gt "0" && echo SVN revision: r`cat ~/SVNREV`
+	echo "7.1" >~SVNREV
 
   svn_checkout: &svn_checkout
     run:
       name: Checkout from the SF.net
       command: >
-        svn --config-option 'config:miscellany:use-commit-times=yes' checkout
-        https://svn.code.sf.net/p/smartmontools/code/trunk/smartmontools@`cat ~/SVNREV`
+	git clone https://github.com/chair300/smartmontools.git
         ~/smartmontools
 
   sm_distfile: &sm_distfile
