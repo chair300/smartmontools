@@ -3,15 +3,15 @@
 #
 dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.60])
-AC_INIT([smartmontools], [7.1], [smartmontools-support@listi.jpberlin.de])
+AC_INIT([smartmontools], [7.2], [smartmontools-support@listi.jpberlin.de])
 AM_INIT_AUTOMAKE([1.10 foreign])
 
 # Version of drive database branch
 smartmontools_drivedb_version=7.0
 
 smartmontools_cvs_tag=`echo '$Id$'`
-smartmontools_release_date=2018-12-30
-smartmontools_release_time="14:47:55 UTC"
+smartmontools_release_date=2019-12-30
+smartmontools_release_time="15:00:11 UTC"
 
 AC_DEFINE_UNQUOTED(SMARTMONTOOLS_CONFIGURE_ARGS, "$ac_configure_args",             [smartmontools Configure Arguments])
 AC_DEFINE_UNQUOTED(SMARTMONTOOLS_RELEASE_DATE,   "$smartmontools_release_date",    [smartmontools Release Date])
@@ -66,11 +66,8 @@ AC_MSG_CHECKING([whether this is a build from SVN])
 is_svn_build=no
 svn_deps=
 if test -f "$srcdir/.svn/wc.db"; then
-  # SVN 1.7, 1.8 working copy
+  # SVN >= 1.7 working copy
   svn_deps='${srcdir}/.svn/wc.db'
-elif test -f "${srcdir}/.svn/entries"; then
-  # SVN <= 1.6 working copy (SVN 1.7 has empty entries file)
-  svn_deps='${srcdir}/.svn/entries'
 fi
 if test -n "$svn_deps"; then
   is_svn_build=unknown
@@ -605,7 +602,7 @@ AC_SUBST(smartmontools_release_time)
 os_libs=
 os_dltools='curl wget lynx svn'
 os_mailer=mail
-os_hostname="'hostname'"
+os_hostname="'hostname' 'uname -n'"
 os_dnsdomainname=
 os_nisdomainname="'domainname'"
 os_darwin=no
@@ -660,7 +657,7 @@ case "${host}" in
   *-*-cygwin*)
     os_deps='os_win32.o dev_areca.o'
     os_mailer='email'
-    os_hostname="'hostname' 'echo "'"${HOSTNAME?unset}"'"'"
+    os_hostname="'hostname' 'uname -n' 'echo "'"${HOSTNAME?unset}"'"'"
     os_dnsdomainname="'dnsdomainname' 'hostname -d' 'echo "'"${USERDNSDOMAIN?unset}"'"'"
     os_nisdomainname=
     os_win32=yes

@@ -2108,7 +2108,7 @@ int csmi_device::get_phy_info(CSMI_SAS_PHY_INFO & phy_info, port_2_index_map & p
 
   // Create port -> index map
   //                                     Intel RST              AMD rcraid
-  // Phy[i].Value              9/10.x  14.8    15.2   16/17.0   9.2
+  // Phy[i].Value              9/10.x  14.8    15.2  16.0/17.7  9.2
   // ---------------------------------------------------------------------
   // bPortIdentifier           0xff    port    0x00    port     (port)
   // Identify.bPhyIdentifier   index?  index   index   port     index
@@ -2353,7 +2353,8 @@ bool csmi_ata_device::ata_pass_through(const ata_cmd_in & in, ata_cmd_out & out)
   }
 
   // Get device-to-host FIS
-  {
+  // Assume values are unavailable if all register fields are zero (AMD RAID driver)
+  if (nonempty(pthru_buf->Status.bStatusFIS + 2, 13 - 2 + 1)) {
     const unsigned char * fis = pthru_buf->Status.bStatusFIS;
     ata_out_regs & lo = out.out_regs;
     lo.status       = fis[ 2];
@@ -4098,6 +4099,7 @@ std::string win_smart_interface::get_os_version_str()
           case 17134:   w = "w10-1803"; break;
           case 17763:   w = "w10-1809"; break;
           case 18362:   w = "w10-1903"; break;
+          case 18363:   w = "w10-1909"; break;
           default:      w = "w10";
                         build = vi.dwBuildNumber; break;
         } break;
@@ -4108,6 +4110,7 @@ std::string win_smart_interface::get_os_version_str()
           case 17134:   w = "2016-1803"; break;
           case 17763:   w = "2019";      break;
           case 18362:   w = "2019-1903"; break;
+          case 18363:   w = "2019-1909"; break;
           default:      w = (vi.dwBuildNumber < 17763
                           ? "2016"
                           : "2019");

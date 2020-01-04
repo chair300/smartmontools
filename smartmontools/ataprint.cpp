@@ -1617,8 +1617,8 @@ const devstat_entry_info devstat_info_0x01[] = {
   {  6, "Date and Time TimeStamp" }, // ACS-3
   {  4, "Pending Error Count" }, // ACS-4
   {  2, "Workload Utilization" }, // ACS-4
-  {  6, "Utilization Usage Rate" }, // ACS-4 (TODO: field provides 3 values)
-  {  2, "Resource Availability" }, // ACS-4
+  {  6, "Utilization Usage Rate" }, // ACS-4 (TODO: 47:40: Validity, 39:36 Basis, 7:0 Usage rate)
+  {  7, "Resource Availability" }, // ACS-4 (TODO: 55:16 Resources, 15:0 Fraction)
   {  1, "Random Write Resources Used" }, // ACS-4
   {  0, 0 }
 };
@@ -3070,7 +3070,7 @@ static int ataPrintSCTTempHist(const ata_sct_temperature_history_table * tmh)
   jout("\nIndex    Estimated Time   Temperature Celsius\n");
   unsigned n = 0, i = (tmh->cb_index+1) % tmh->cb_size;
   unsigned interval = (tmh->interval > 0 ? tmh->interval : 1);
-  time_t t = time(0) - (long) (tmh->cb_size-1) * interval * 60;
+  time_t t = time(0) - (time_t)(tmh->cb_size-1) * interval * 60;
   t -= t % (interval * 60);
   while (n < tmh->cb_size) {
     // Find range of identical temperatures
