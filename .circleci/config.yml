@@ -13,15 +13,12 @@ references:
     run:
       name: Checkout from the github
       command: >
-        git clone https://github.com/chair300/smartmontools.git &&
-        cd ~/smartmontools
+        git clone https://github.com/chair300/smartmontools.git
 
   sm_distfile: &sm_distfile
     run:
       name: Creating src.tar.gz
       command: |
-        ls -la &&
-        cd ~/smartmontools &&
         ls -la &&
         cd smartmontools &&
         ls -la &&
@@ -29,9 +26,9 @@ references:
         ./autogen.sh --force &&
         mkdir build && cd build &&
         ../configure &&
-        make dist && tar -tvzf smartmontools.tar.gz &&
+        make dist && tar -tvzf smartmontools-7.2.tar.gz &&
         mkdir /artefacts &&
-        mv smartmontools.tar.gz /artefacts/smartmontools.src.tar.gz
+        mv smartmontools-7.2.tar.gz /artefacts/smartmontools.src.tar.gz
 
   sm_compile_linux: &sm_compile_linux
     run:
