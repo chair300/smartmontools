@@ -189,7 +189,7 @@ jobs:
 
   test_ubuntu_latest:
     docker:
-      - image: chair300/docker-build:latest
+      - image: chair300/smartd-docker-test:latest
     working_directory: ~/smartmontools
     steps:
       - *get_svn_commit
