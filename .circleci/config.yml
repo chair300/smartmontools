@@ -20,9 +20,12 @@ references:
     run:
       name: Creating src.tar.gz
       command: |
+        ls -la &&
         cd ~/smartmontools &&
         ls -la &&
-        ls -la smartmontools &&
+        cd smartmontools &&
+        ls -la &&
+        cd smartmontools &&
         ./autogen.sh --force &&
         mkdir build && cd build &&
         ../configure &&
