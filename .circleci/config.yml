@@ -7,8 +7,7 @@ references:
       name: Get git revision from the git SHA1 using github API
       command: |
         curl --silent https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/commits/${CIRCLE_SHA1} \
-        | jq .sha | sed s/\"//g  >~/SVNREV &&
-        test "`cat ~/SVNREV`" -gt "0" && echo SVN revision: r`cat ~/SVNREV`
+        | jq .sha | sed s/\"//g  >~/SVNREV 
 
   svn_checkout: &svn_checkout
     run:
