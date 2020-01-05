@@ -1639,7 +1639,7 @@ int main(int argc, char **argv)
     }
     t = clock() - t;
     // end timer here, add to the jglb code for the device response time
-    jglb["smartctl"]["device_response_time_sec"] = ((float)t) / CLOCKS_PER_SEC);
+    jglb["smartctl"]["device_response_time_sec"] =  uint128_to_str_precision_bits(((float)t) / CLOCKS_PER_SEC));
     // Print JSON if enabled
     if (jglb.has_uint128_output())
       jglb["smartctl"]["uint128_precision_bits"] = uint128_to_str_precision_bits();
