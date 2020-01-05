@@ -17,6 +17,7 @@
 #include <inttypes.h>
 #include <stdio.h>
 #include <sys/types.h>
+#include <sys/times.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdarg.h>
