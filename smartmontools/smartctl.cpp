@@ -1644,7 +1644,7 @@ static struct tms en_cpu;
     //t = clock() - start;
     // end timer here, add to the jglb code for the device response time
     en_time = times(&en_cpu);
-    jglb["smartctl"]["device_response_time"] =  std::to_string((intmax_t)(en_time - st_time));
+    jglb["smartctl"]["device_response_time"] =  (intmax_t)(en_time - st_time);
     // Print JSON if enabled
     if (jglb.has_uint128_output())
       jglb["smartctl"]["uint128_precision_bits"] = uint128_to_str_precision_bits();
