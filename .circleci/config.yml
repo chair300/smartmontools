@@ -13,7 +13,7 @@ references:
     run:
       name: Checkout from the github
       command: >
-        git clone https://github.com/chair300/smartmontools.git
+        git clone https://github.com/chair300/smartmontools.git &&
         cd ~/smartmontools
 
   sm_distfile: &sm_distfile
