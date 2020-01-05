@@ -1625,9 +1625,12 @@ int main(int argc, char **argv)
   int status;
   bool badcode = false;
   // set clock to find the device open and response time
+  static clock_t st_time;
+static clock_t en_time;
+static struct tms st_cpu;
+static struct tms en_cpu;
   clock_t t;
-  t = clock();
-
+  st_time = times(&st_cpu);
   try {
     try {
       // Do the real work ...
@@ -1637,9 +1640,10 @@ int main(int argc, char **argv)
       // Exit status from checksumwarning() and failuretest() arrives here
       status = ex;
     }
-    t = clock() - t;
+    t = clock() - start;
     // end timer here, add to the jglb code for the device response time
-    jglb["smartctl"]["device_response_time_sec"] =  std::to_string(t);
+    en_time = times(&en_cpu);
+    jglb["smartctl"]["device_response_time"] =  std::to_string((intmax_t)(en_time - st_time));
     // Print JSON if enabled
     if (jglb.has_uint128_output())
       jglb["smartctl"]["uint128_precision_bits"] = uint128_to_str_precision_bits();
