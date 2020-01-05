@@ -22,8 +22,6 @@ references:
         ls -la &&
         cd smartmontools &&
         ls -la &&
-        cd smartmontools &&
-        ls -la &&
         ./autogen.sh --force &&
         mkdir build && cd build &&
         ../configure &&
