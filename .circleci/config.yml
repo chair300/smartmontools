@@ -148,7 +148,7 @@ references:
         BUILD_INFO='"(CircleCI)"' &&
         mkdir ~/build && cd ~/build &&
         tar -xzf /artefacts/smartmontools.src.tar.gz &&
-        cd smartmontools-${SM_VER} && mkdir build && cd build &&
+        cd smartmontools-7.2 && mkdir build && cd build &&
         TARGET="-target x86_64-unknown-freebsd12 --sysroot=/opt/cross-freebsd-12/" &&
         ../configure CC="clang $TARGET" CXX="clang++ $TARGET" LDFLAGS="-static" --host=x86_64-pc-freebsd12 &&
         make -j2 BUILD_INFO="$BUILD_INFO" &&
