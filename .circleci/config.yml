@@ -190,6 +190,7 @@ jobs:
     steps:
       - *get_svn_commit
       - *svn_checkout
+      - *sm_distfile
       - *sm_compile_freebsd12
 #      - *sm_distfile
 #      - *sm_compile_linux
