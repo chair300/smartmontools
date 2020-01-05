@@ -37,11 +37,11 @@ references:
         SM_VER=`cat ~/SM_VER` && SVNREV=`cat ~/SVNREV` &&
         BUILD_INFO='"(CircleCI)"' &&
         mkdir ~/build && cd ~/build &&
-        tar -xzf /artefacts/smartmontools-${SM_VER}-r${SVNREV}.src.tar.gz &&
-        cd smartmontools-${SM_VER} && mkdir build && cd build &&
+        tar -xzf /artefacts/smartmontools.src.tar.gz &&
+        cd smartmontools-7.2 && mkdir build && cd build &&
         ../configure LDFLAGS="-static" && make -j2 BUILD_INFO="$BUILD_INFO" && make check &&
         mkdir inst && make DESTDIR="$(pwd)/inst" install &&
-        (cd inst && tar czf "/artefacts/smartmontools-linux-x86_64-static-${SM_VER}-r${SVNREV}.tar.gz" *) &&
+        (cd inst && tar czf "/artefacts/smartmontools-linux-x86_64-static-7.2.tar.gz" *) &&
         rm -rf ~/build
 
   sm_compile_linux32: &sm_compile_linux32
@@ -66,10 +66,10 @@ references:
         SM_VER=`cat ~/SM_VER` && SVNREV=`cat ~/SVNREV` &&
         BUILD_INFO='"(CircleCI)"' &&
         mkdir ~/build && cd ~/build &&
-        tar -xzf /artefacts/smartmontools-${SM_VER}-r${SVNREV}.src.tar.gz &&
-        cd smartmontools-${SM_VER} && mkdir build && cd build &&
+        tar -xzf /artefacts/smartmontools.src.tar.gz &&
+        cd smartmontools-7.2 && mkdir build && cd build &&
         ../configure CC=clang CXX=clang++ LDFLAGS="-static" &&
-        HTMLDIR="smartmontools-linux-clang-analyzer-${SM_VER}-r${SVNREV}" &&
+        HTMLDIR="smartmontools-linux-clang-analyzer-7.2" &&
         CHECKERS="
           optin.portability.UnixAPI optin.cplusplus.VirtualCall
           nullability.NullableDereferenced nullability.NullablePassedToNonnull
@@ -81,7 +81,7 @@ references:
             `for x in $CHECKERS; do echo -enable-checker $x; done` \
           make -j2 BUILD_INFO="$BUILD_INFO" && make check &&
         mkdir inst && make DESTDIR="$(pwd)/inst" install &&
-        (cd inst && tar czf "/artefacts/smartmontools-linux-x86_64-static-clang-${SM_VER}-r${SVNREV}.tar.gz" *) &&
+        (cd inst && tar czf "/artefacts/smartmontools-linux-x86_64-static-clang-7.2.tar.gz" *) &&
         if ls -d $HTMLDIR/* >/dev/null 2>/dev/null; then
           tar czf "/artefacts/$HTMLDIR.tar.gz" $HTMLDIR ;
         fi &&
@@ -195,13 +195,13 @@ jobs:
       - *sm_distfile
       - *sm_compile_freebsd12
 #      - *sm_distfile
-#      - *sm_compile_linux
+      - *sm_compile_linux
 #      - *sm_compile_linux32
 #      - *sm_compile_win
 #      - *sm_compile_darwin
 #      - *sm_compile_freebsd11
 #      - *sm_compile_freebsd12
-#      - *sm_compile_linux_clang
+      - *sm_compile_linux_clang
 #      - *sm_run_cppcheck
 #      - *sm_compute_hashes
 
